@@ -69,7 +69,7 @@ class record_player(object):
         self.barriers_img = []
         self.barriers_rect = []
         for i in range(self.barriers.shape[0]):
-            self.barriers_img.append(pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/barrier_{}.png'.format('horizontal' if i < 3 else 'vertical')))
+            self.barriers_img.append(pygame.image.load('./imgs/barrier_{}.png'.format('horizontal' if i < 3 else 'vertical')))
             self.barriers_rect.append(self.barriers_img[-1].get_rect())
             self.barriers_rect[-1].center = [self.barriers[i][0:2].mean(), self.barriers[i][2:4].mean()]
         # load areas imgs
@@ -77,18 +77,18 @@ class record_player(object):
         self.areas_rect = []
         for oi, o in enumerate(['red', 'blue']):
             for ti, t in enumerate(['bonus', 'supply', 'start', 'start']):
-                self.areas_img.append(pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/area_{}_{}.png'.format(t, o)))
+                self.areas_img.append(pygame.image.load('./imgs/area_{}_{}.png'.format(t, o)))
                 self.areas_rect.append(self.areas_img[-1].get_rect())
                 self.areas_rect[-1].center = [self.areas[oi, ti][0:2].mean(), self.areas[oi, ti][2:4].mean()]
         # load supply head imgs
-        self.head_img = [pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/area_head_{}.png'.format(i)) for i in ['red', 'blue']]
+        self.head_img = [pygame.image.load('./imgs/area_head_{}.png'.format(i)) for i in ['red', 'blue']]
         self.head_rect = [self.head_img[i].get_rect() for i in range(len(self.head_img))]
         self.head_rect[0].center = [self.areas[0, 1][0:2].mean(), self.areas[0, 1][2:4].mean()]
         self.head_rect[1].center = [self.areas[1, 1][0:2].mean(), self.areas[1, 1][2:4].mean()]
-        self.chassis_img = pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/chassis_g.png')
-        self.gimbal_img = pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/gimbal_g.png')
-        self.bullet_img = pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/bullet_s.png')
-        self.info_bar_img = pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/info_bar.png')
+        self.chassis_img = pygame.image.load('./imgs/chassis_g.png')
+        self.gimbal_img = pygame.image.load('./imgs/gimbal_g.png')
+        self.bullet_img = pygame.image.load('./imgs/bullet_s.png')
+        self.info_bar_img = pygame.image.load('./imgs/info_bar.png')
         self.bullet_rect = self.bullet_img.get_rect()
         self.info_bar_rect = self.info_bar_img.get_rect()
         self.info_bar_rect.center = [200, self.map_width/2]
@@ -257,7 +257,7 @@ class kernal(gym.Env): # gym.Env
             self.barriers_img = []
             self.barriers_rect = []
             for i in range(self.barriers.shape[0]):
-                self.barriers_img.append(pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/barrier_{}.png'.format('horizontal' if i < 3 else 'vertical')))
+                self.barriers_img.append(pygame.image.load('./imgs/barrier_{}.png'.format('horizontal' if i < 3 else 'vertical')))
                 self.barriers_rect.append(self.barriers_img[-1].get_rect())
                 self.barriers_rect[-1].center = [self.barriers[i][0:2].mean(), self.barriers[i][2:4].mean()]
             # load areas imgs
@@ -265,18 +265,18 @@ class kernal(gym.Env): # gym.Env
             self.areas_rect = []
             for oi, o in enumerate(['red', 'blue']):
                 for ti, t in enumerate(['bonus', 'supply', 'start', 'start']):
-                    self.areas_img.append(pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/area_{}_{}.png'.format(t, o)))
+                    self.areas_img.append(pygame.image.load('./imgs/area_{}_{}.png'.format(t, o)))
                     self.areas_rect.append(self.areas_img[-1].get_rect())
                     self.areas_rect[-1].center = [self.areas[oi, ti][0:2].mean(), self.areas[oi, ti][2:4].mean()]
             # load supply head imgs
-            self.head_img = [pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/area_head_{}.png'.format(i)) for i in ['red', 'blue']]
+            self.head_img = [pygame.image.load('./imgs/area_head_{}.png'.format(i)) for i in ['red', 'blue']]
             self.head_rect = [self.head_img[i].get_rect() for i in range(len(self.head_img))]
             self.head_rect[0].center = [self.areas[0, 1][0:2].mean(), self.areas[0, 1][2:4].mean()]
             self.head_rect[1].center = [self.areas[1, 1][0:2].mean(), self.areas[1, 1][2:4].mean()]
-            self.chassis_img = pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/chassis_g.png')
-            self.gimbal_img = pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/gimbal_g.png')
-            self.bullet_img = pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/bullet_s.png')
-            self.info_bar_img = pygame.image.load('/Users/coco/Downloads/ICRA-simulator/ICRA_simulator/envs/imgs/info_bar.png')
+            self.chassis_img = pygame.image.load('./imgs/chassis_g.png')
+            self.gimbal_img = pygame.image.load('./imgs/gimbal_g.png')
+            self.bullet_img = pygame.image.load('./imgs/bullet_s.png')
+            self.info_bar_img = pygame.image.load('./imgs/info_bar.png')
             self.bullet_rect = self.bullet_img.get_rect()
             self.info_bar_rect = self.info_bar_img.get_rect()
             self.info_bar_rect.center = [200, self.map_width/2]
