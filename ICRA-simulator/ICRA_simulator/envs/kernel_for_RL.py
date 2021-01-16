@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 kernal v1.0
 '''
@@ -13,7 +14,6 @@ class bullet(object):
         self.speed = speed
         self.angle = angle
         self.owner = owner
-
 
 class record(object):
     def __init__(self, time, cars, compet_info, detect, vision, bullets):
@@ -45,22 +45,22 @@ class record_player(object):
                                 [350.0, 450.0, 0.0, 100.0],
                                 [700.0, 800.0, 400.0, 500.0],
                                 [0.0, 100.0, 400.0, 500.0]],
-                            [[120.0, 220.0, 125.0, 225.0],
+                               [[120.0, 220.0, 125.0, 225.0],
                                 [350.0, 450.0, 400.0, 500.0],
                                 [0.0, 100.0, 0.0, 100.0],
                                 [700.0, 800.0, 0.0, 100.0]]], dtype='float32')
         self.barriers = np.array([[350.0, 450.0, 237.5, 262.5],
-                                [120.0, 220.0, 100.0, 125.0],
-                                [580.0, 680.0, 375.0, 400.0],
-                                [140.0, 165.0, 260.0, 360.0],
-                                [635.0, 660.0, 140.0, 240.0],
-                                [325.0, 350.0, 400.0, 500.0],
-                                [450.0, 475.0, 0.0, 100.0]], dtype='float32')
+                                  [120.0, 220.0, 100.0, 125.0],
+                                  [580.0, 680.0, 375.0, 400.0],
+                                  [140.0, 165.0, 260.0, 360.0],
+                                  [635.0, 660.0, 140.0, 240.0],
+                                  [325.0, 350.0, 400.0, 500.0],
+                                  [450.0, 475.0, 0.0, 100.0]], dtype='float32')
         # load barriers imgs
         self.barriers_img = []
         self.barriers_rect = []
         for i in range(self.barriers.shape[0]):
-            self.barriers_img.append(pygame.image.load('ICRA_simulator/envs/imgs/barrier_{}.png'.format('horizontal' if i < 3 else 'vertical')))
+            self.barriers_img.append(pygame.image.load('./ICRA_simulator/envs/imgs/barrier_{}.png'.format('horizontal' if i < 3 else 'vertical')))
             self.barriers_rect.append(self.barriers_img[-1].get_rect())
             self.barriers_rect[-1].center = [self.barriers[i][0:2].mean(), self.barriers[i][2:4].mean()]
         # load areas imgs
@@ -68,18 +68,18 @@ class record_player(object):
         self.areas_rect = []
         for oi, o in enumerate(['red', 'blue']):
             for ti, t in enumerate(['bonus', 'supply', 'start', 'start']):
-                self.areas_img.append(pygame.image.load('ICRA_simulator/envs/imgs/area_{}_{}.png'.format(t, o)))
+                self.areas_img.append(pygame.image.load('./ICRA_simulator/envs/imgs/area_{}_{}.png'.format(t, o)))
                 self.areas_rect.append(self.areas_img[-1].get_rect())
                 self.areas_rect[-1].center = [self.areas[oi, ti][0:2].mean(), self.areas[oi, ti][2:4].mean()]
         # load supply head imgs
-        self.head_img = [pygame.image.load('./imgs/area_head_{}.png'.format(i)) for i in ['red', 'blue']]
+        self.head_img = [pygame.image.load('./ICRA_simulator/envs/imgs/area_head_{}.png'.format(i)) for i in ['red', 'blue']]
         self.head_rect = [self.head_img[i].get_rect() for i in range(len(self.head_img))]
         self.head_rect[0].center = [self.areas[0, 1][0:2].mean(), self.areas[0, 1][2:4].mean()]
         self.head_rect[1].center = [self.areas[1, 1][0:2].mean(), self.areas[1, 1][2:4].mean()]
-        self.chassis_img = pygame.image.load('ICRA_simulator/envs/imgs/chassis_g.png')
-        self.gimbal_img = pygame.image.load('ICRA_simulator/envs/imgs/gimbal_g.png')
-        self.bullet_img = pygame.image.load('ICRA_simulator/envs/imgs/bullet_s.png')
-        self.info_bar_img = pygame.image.load('ICRA_simulator/envs/imgs/info_bar.png')
+        self.chassis_img = pygame.image.load('./ICRA_simulator/envs/imgs/chassis_g.png')
+        self.gimbal_img = pygame.image.load('./ICRA_simulator/envs/imgs/gimbal_g.png')
+        self.bullet_img = pygame.image.load('./ICRA_simulator/envs/imgs/bullet_s.png')
+        self.info_bar_img = pygame.image.load('./ICRA_simulator/envs/imgs/info_bar.png')
         self.bullet_rect = self.bullet_img.get_rect()
         self.info_bar_rect = self.info_bar_img.get_rect()
         self.info_bar_rect.center = [200, self.map_width/2]
@@ -171,27 +171,27 @@ class record_player(object):
 
     def check_points_wheel(self, car):
         rotate_matrix = np.array([[np.cos(-np.deg2rad(car[3]+90)), -np.sin(-np.deg2rad(car[3]+90))],
-                                [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
+                                  [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
         xs = np.array([[-22.5, -29], [22.5, -29], 
-                    [-22.5, -14], [22.5, -14], 
-                    [-22.5, 14], [22.5, 14],
-                    [-22.5, 29], [22.5, 29]])
+                       [-22.5, -14], [22.5, -14], 
+                       [-22.5, 14], [22.5, 14],
+                       [-22.5, 29], [22.5, 29]])
         return [np.matmul(xs[i], rotate_matrix) + car[1:3] for i in range(xs.shape[0])]
 
     def check_points_armor(self, car):
         rotate_matrix = np.array([[np.cos(-np.deg2rad(car[3]+90)), -np.sin(-np.deg2rad(car[3]+90))],
-                                [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
+                                  [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
         xs = np.array([[-6.5, -30], [6.5, -30], 
-            [-18.5,  -7], [18.5,  -7],
-            [-18.5,  0], [18.5,  0],
-            [-18.5,  6], [18.5,  6],
-            [-6.5, 30], [6.5, 30]])
+             [-18.5,  -7], [18.5,  -7],
+             [-18.5,  0], [18.5,  0],
+             [-18.5,  6], [18.5,  6],
+             [-6.5, 30], [6.5, 30]])
         return [np.matmul(x, rotate_matrix) + car[1:3] for x in xs]
 
 class kernal(gym.Env): # gym.Env
 
     def __init__(self, car_num,  robot_id,render=False, record=True):# map, car, render
-
+        
         self.robot_id = robot_id
         self.car_num = car_num
         self.render = render
@@ -204,40 +204,58 @@ class kernal(gym.Env): # gym.Env
         self.lidar_angle = 120 / 2
         self.move_discount = 0.6
         # above are params that can be challenged depended on situation
-        self.map_length = 800
-        self.map_width = 500
+        self.map_length = 808
+        self.map_width = 448
         self.theta = np.rad2deg(np.arctan(45/60))
         self.record=record
-        self.areas = np.array([[[580.0, 680.0, 275.0, 375.0],
-                                [350.0, 450.0, 0.0, 100.0],
-                                [700.0, 800.0, 400.0, 500.0],
-                                [0.0, 100.0, 400.0, 500.0]],
-                            [[120.0, 220.0, 125.0, 225.0],
-                                [350.0, 450.0, 400.0, 500.0],
-                                [0.0, 100.0, 0.0, 100.0],
-                                [700.0, 800.0, 0.0, 100.0]]], dtype='float32')
+        self.areas = np.array([[[708.0, 808.0, 348.0, 448.0],
+                                [708.0, 808.0, 0.0, 100.0]],
+                                [[0.0, 100.0, 0.0, 100.0],
+                                [0.0, 100.0, 348.0, 448.0]]], dtype='float32')
+        self.special_area = np.array([[23.0, 77.0, 145.0, 193.0],
+                                [731.0, 785.0, 255.0, 303.0], 
+                                [377.0, 431.0, 20.5, 25.3], 
+                                [377.0, 431.0, 379.5, 427.5],
+                                [163.0, 217.0, 307.0, 355.0], 
+                                [591.0, 645.0, 141.0, 189.0]], dtype='float32')
         self.barriers = np.array([[350.0, 450.0, 237.5, 262.5],
-                                [120.0, 220.0, 100.0, 125.0],
-                                [580.0, 680.0, 375.0, 400.0],
-                                [140.0, 165.0, 260.0, 360.0],
-                                [635.0, 660.0, 140.0, 240.0],
-                                [325.0, 350.0, 400.0, 500.0],
-                                [450.0, 475.0, 0.0, 100.0]], dtype='float32')
+                                  [120.0, 220.0, 100.0, 125.0],
+                                  [580.0, 680.0, 375.0, 400.0],
+                                  [140.0, 165.0, 260.0, 360.0],
+                                  [635.0, 660.0, 140.0, 240.0],
+                                  [325.0, 350.0, 400.0, 500.0],
+                                  [450.0, 475.0, 0.0, 100.0]], dtype='float32')
 
         self.prev_reward = 100
+  
+        # observation_low = np.array([
+        #     0,
+        #     np.full((car_num,15),-1000),
+        #     np.array([[0, 0, 0, 0], [0, 0, 0, 0]], dtype='int16'),
+        #     np.full((car_num,car_num),0),
+        #     np.full((car_num,car_num),0)
+        # ])
+        # observation_high = np.array([
+        #   180,
+        #   np.array([[1, 800, 500, 180, 90, 5000, 2000, 600, 1, 1, 5000, 1000, 5000, 5000, 5000],
+        #                  [1, 800, 500, 180, 90, 5000, 2000, 600, 1, 1, 5000, 1000, 5000, 5000, 5000],
+        #                  [1, 800, 500, 180, 90, 5000, 2000, 600, 1, 1, 5000, 1000, 5000, 5000, 5000],
+        #                  [1, 800, 500, 180, 90, 5000, 2000, 600, 1, 1, 5000, 1000, 5000, 5000, 5000]], dtype='float32'),
+        #   np.full((car_num,15),5000),
+        #   np.array([[2, 1, 1000, 6000], [2, 1, 1000, 6000]], dtype='int16'),
+        #   np.full((car_num,car_num),1),
+        #   np.full((car_num,car_num),1)
+        # ])
 
-        
-        
-        observation_high = np.array([
-          np.finfo(np.float32).max,
-          np.finfo(np.float32).max,
-          np.finfo(np.float32).max,
-          np.finfo(np.float32).max])
-        action_high = np.array([0.1])
-
-        self.action_space = spaces.Box(low=-action_high,high=action_high)
-        self.observation_space = spaces.Box(-observation_high, observation_high)
-
+        self.action_space = spaces.Box(low=np.array([0,-1]),high=np.array([7,1]))
+        # self.observation_space = spaces.Box(observation_low, observation_high)
+        self.observation_space = spaces.Dict({
+            'time': spaces.Box(low=0,high=180,shape=(1,)),
+            'cars': spaces.Box(low=-1000.0,high=5000.0,shape=(car_num,15), dtype='float32'),
+            'compet': spaces.Box(low=0,high=6000,shape=(2,4)),
+            'detect': spaces.Box(low=0,high=1,shape=(car_num,car_num)),
+            'vision': spaces.Box(low=0,high=1,shape=(car_num,car_num))
+        })
 
 
         if render:
@@ -247,26 +265,32 @@ class kernal(gym.Env): # gym.Env
             self.gray = (180, 180, 180)
             self.red = (190, 20, 20)
             self.blue = (10, 125, 181)
-            # load barriers imgs
+            # load barriers imgs ##
             self.barriers_img = []
             self.barriers_rect = []
             for i in range(self.barriers.shape[0]):
                 self.barriers_img.append(pygame.image.load('./ICRA_simulator/envs/imgs/barrier_{}.png'.format('horizontal' if i < 3 else 'vertical')))
                 self.barriers_rect.append(self.barriers_img[-1].get_rect())
                 self.barriers_rect[-1].center = [self.barriers[i][0:2].mean(), self.barriers[i][2:4].mean()]
-            # load areas imgs
+            # load start imgs OK~
             self.areas_img = []
             self.areas_rect = []
             for oi, o in enumerate(['red', 'blue']):
-                for ti, t in enumerate(['bonus', 'supply', 'start', 'start']):
-                    self.areas_img.append(pygame.image.load('./ICRA_simulator/envs/imgs/area_{}_{}.png'.format(t, o)))
+                for ti, t in enumerate(['start', 'start']):
+                    startpicture = pygame.image.load('./ICRA_simulator/envs/imgs/area_{}_{}.png'.format(t, o))
+                    startpicture = pygame.transform.scale(startpicture, (100,100))
+                    self.areas_img.append(startpicture)
                     self.areas_rect.append(self.areas_img[-1].get_rect())
                     self.areas_rect[-1].center = [self.areas[oi, ti][0:2].mean(), self.areas[oi, ti][2:4].mean()]
-            # load supply head imgs
-            self.head_img = [pygame.image.load('./ICRA_simulator/envs/imgs/area_head_{}.png'.format(i)) for i in ['red', 'blue']]
-            self.head_rect = [self.head_img[i].get_rect() for i in range(len(self.head_img))]
-            self.head_rect[0].center = [self.areas[0, 1][0:2].mean(), self.areas[0, 1][2:4].mean()]
-            self.head_rect[1].center = [self.areas[1, 1][0:2].mean(), self.areas[1, 1][2:4].mean()]
+            # load special_area imgs
+            picture = pygame.image.load('ICRA_simulator/envs/imgs/special_area.png')
+            picture = pygame.transform.scale(picture, (54,48))            
+            self.special_area_img = [picture for i in range(6)]
+            self.special_area_rect = []
+            for i in range(6):
+                self.special_area_rect.append(self.special_area_img[i].get_rect())
+                self.special_area_rect[-1].center = [self.special_area[i][0:2].mean(), self.special_area[i][2:4].mean()] 
+            # load another imgs
             self.chassis_img = pygame.image.load('./ICRA_simulator/envs/imgs/chassis_g.png')
             self.gimbal_img = pygame.image.load('./ICRA_simulator/envs/imgs/gimbal_g.png')
             self.bullet_img = pygame.image.load('./ICRA_simulator/envs/imgs/bullet_s.png')
@@ -292,9 +316,9 @@ class kernal(gym.Env): # gym.Env
         self.dev = False
         self.memory = []
         cars = np.array([[1, 50, 50, 0, 0, 0, 2000, 0, 0, 1, 0, 0, 0, 0, 0],
-                        [0, 50, 450, 0, 0, 0, 2000, 0, 0, 1, 0, 0, 0, 0, 0],
-                        [1, 750, 50, 0, 0, 0, 2000, 0, 0, 1, 0, 0, 0, 0, 0],
-                        [0, 750, 450, 0, 0, 0, 2000, 0, 0, 1, 0, 0, 0, 0, 0]], dtype='float32')
+                         [0, 50, 450, 0, 0, 0, 2000, 0, 0, 1, 0, 0, 0, 0, 0],
+                         [1, 750, 50, 0, 0, 0, 2000, 0, 0, 1, 0, 0, 0, 0, 0],
+                         [0, 750, 450, 0, 0, 0, 2000, 0, 0, 1, 0, 0, 0, 0, 0]], dtype='float32')
         self.cars = cars[0:self.car_num]
         self.prev_reward = 100
         self.cars.flatten()
@@ -324,7 +348,7 @@ class kernal(gym.Env): # gym.Env
         # KO or win reward...
         return reward
 
-    def one_epoch(self):
+    def one_epoch(self):   
         for n in range(self.car_num):
             if not self.epoch % 10:
                 self.orders_to_acts(n)
@@ -439,7 +463,7 @@ class kernal(gym.Env): # gym.Env
         # check supply
         if self.acts[n, 6]:
             dis = np.abs(self.cars[n, 1:3] - [self.areas[int(self.cars[n, 0]), 1][0:2].mean(), \
-                                self.areas[int(self.cars[n, 0]), 1][2:4].mean()]).sum()
+                                   self.areas[int(self.cars[n, 0]), 1][2:4].mean()]).sum()
             if dis < 23 and self.compet_info[int(self.cars[n, 0]), 0] and not self.cars[n, 7]:
                 self.cars[n, 8] = 1
                 self.cars[n, 7] = 600 # 3 s
@@ -482,6 +506,8 @@ class kernal(gym.Env): # gym.Env
             self.screen.blit(self.barriers_img[i], self.barriers_rect[i])
         for i in range(len(self.areas_rect)):
             self.screen.blit(self.areas_img[i], self.areas_rect[i]) 
+        for i in range(6):
+            self.screen.blit(self.special_area_img[i], self.special_area_rect[i])
         for i in range(len(self.bullets)):
             self.bullet_rect.center = self.bullets[i].center
             self.screen.blit(self.bullet_img, self.bullet_rect)
@@ -494,8 +520,9 @@ class kernal(gym.Env): # gym.Env
             gimbal_rotate_rect.center = self.cars[n, 1:3]
             self.screen.blit(chassis_rotate, chassis_rotate_rect)
             self.screen.blit(gimbal_rotate, gimbal_rotate_rect)
-        self.screen.blit(self.head_img[0], self.head_rect[0])
-        self.screen.blit(self.head_img[1], self.head_rect[1])
+        for i in range(6):
+            self.screen.blit(self.special_area_img[i], self.special_area_rect[i])
+            #self.screen.blit(self.special_area_img[1], self.special_area_rect[1])
         for n in range(self.car_num):
             select = np.where((self.vision[n] == 1))[0]+1
             select2 = np.where((self.detect[n] == 1))[0]+1
@@ -536,7 +563,7 @@ class kernal(gym.Env): # gym.Env
     def get_order(self): 
         # get order from controler
         pygame.init()
-
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return True
@@ -548,13 +575,12 @@ class kernal(gym.Env): # gym.Env
         if pressed[pygame.K_4]: self.n = 3
         '''
         self.orders[self.n] = 0
-        a0= random.choice([0,1,2,3])
-        b = random.choice([1,-1])
-        c = random.choice([0,1])
-        a1 = random.choice([4,5,6,7])
-        d = random.choice([0,1])
-        if d == 0: self.orders[self.n,a0] += b
-        else: self.orders[self.n,a1] += c
+        order_name = random.choice([0,1,2,3,4,5,6,7])
+        if order_name < 4:
+            order  = random.choice([1,-1])
+        else:
+            order = random.choice([0,1])
+        self.orders[self.n,order_name] += order
         '''
         if pressed[pygame.K_w]: self.orders[self.n, 0] += 1 # Forward
         if pressed[pygame.K_s]: self.orders[self.n, 0] -= 1 # Backward
@@ -572,7 +598,7 @@ class kernal(gym.Env): # gym.Env
         else: self.orders[self.n, 6] = 0
         if pressed[pygame.K_n]: self.orders[self.n, 7] = 1 
         else: self.orders[self.n, 7] = 0
-'''
+        '''
         if pressed[pygame.K_TAB]: self.dev = True
         else: self.dev = False
         return False
@@ -713,31 +739,31 @@ class kernal(gym.Env): # gym.Env
     def transfer_to_car_coordinate(self, points, n):
         pan_vecter = -self.cars[n, 1:3]
         rotate_matrix = np.array([[np.cos(np.deg2rad(self.cars[n, 3]+90)), -np.sin(np.deg2rad(self.cars[n, 3]+90))],
-                                [np.sin(np.deg2rad(self.cars[n, 3]+90)), np.cos(np.deg2rad(self.cars[n, 3]+90))]])
+                                  [np.sin(np.deg2rad(self.cars[n, 3]+90)), np.cos(np.deg2rad(self.cars[n, 3]+90))]])
         return np.matmul(points + pan_vecter, rotate_matrix)
 
     def check_points_wheel(self, car):
         rotate_matrix = np.array([[np.cos(-np.deg2rad(car[3]+90)), -np.sin(-np.deg2rad(car[3]+90))],
-                                [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
+                                  [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
         xs = np.array([[-22.5, -29], [22.5, -29], 
-                    [-22.5, -14], [22.5, -14], 
-                    [-22.5, 14], [22.5, 14],
-                    [-22.5, 29], [22.5, 29]])
+                       [-22.5, -14], [22.5, -14], 
+                       [-22.5, 14], [22.5, 14],
+                       [-22.5, 29], [22.5, 29]])
         return [np.matmul(xs[i], rotate_matrix) + car[1:3] for i in range(xs.shape[0])]
 
     def check_points_armor(self, car):
         rotate_matrix = np.array([[np.cos(-np.deg2rad(car[3]+90)), -np.sin(-np.deg2rad(car[3]+90))],
-                                [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
+                                  [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
         xs = np.array([[-6.5, -30], [6.5, -30], 
-            [-18.5,  -7], [18.5,  -7],
-            [-18.5,  0], [18.5,  0],
-            [-18.5,  6], [18.5,  6],
-            [-6.5, 30], [6.5, 30]])
+             [-18.5,  -7], [18.5,  -7],
+             [-18.5,  0], [18.5,  0],
+             [-18.5,  6], [18.5,  6],
+             [-6.5, 30], [6.5, 30]])
         return [np.matmul(x, rotate_matrix) + car[1:3] for x in xs]
 
     def get_car_outline(self, car):
         rotate_matrix = np.array([[np.cos(-np.deg2rad(car[3]+90)), -np.sin(-np.deg2rad(car[3]+90))],
-                                [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
+                                  [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
         xs = np.array([[-22.5, -30], [22.5, 30], [-22.5, 30], [22.5, -30]])
         return [np.matmul(xs[i], rotate_matrix) + car[1:3] for i in range(xs.shape[0])]
 
@@ -781,46 +807,38 @@ class kernal(gym.Env): # gym.Env
 
     def get_armor(self, car, i):
         rotate_matrix = np.array([[np.cos(-np.deg2rad(car[3]+90)), -np.sin(-np.deg2rad(car[3]+90))],
-                                [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
+                                  [np.sin(-np.deg2rad(car[3]+90)), np.cos(-np.deg2rad(car[3]+90))]])
         xs = np.array([[0, -30], [18.5, 0], [0, 30], [-18.5,  0]])
         return np.matmul(xs[i], rotate_matrix) + car[1:3]
 
     def save_record(self, file):
         np.save(file, self.memory)
-
-
+            
+            
 ''' important indexs
 areas_index = [[{'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 0 bonus red
                 {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 1 supply red
                 {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 2 start 0 red
                 {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}], # 3 start 1 red
-
-            [{'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 0 bonus blue
+               [{'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 0 bonus blue
                 {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 1 supply blue
                 {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 2 start 0 blue
                 {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}]] # 3 start 1 blue
                             
-
 barriers_index = [{'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 0 horizontal
-                {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 1 horizontal
-                {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 2 horizontal
-                {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 3 vertical
-                {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 4 vertical
-                {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 5 vertical
-                {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}] # 6 vertical
-
+                  {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 1 horizontal
+                  {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 2 horizontal
+                  {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 3 vertical
+                  {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 4 vertical
+                  {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}, # 5 vertical
+                  {'border_x0': 0, 'border_x1': 1,'border_y0': 2,'border_y1': 3}] # 6 vertical
 armor编号：0：前，1：右，2：后，3左，车头为前
-
 act_index = {'rotate_speed': 0, 'yaw_speed': 1, 'x_speed': 2, 'y_speed': 3, 'shoot': 4, 'shoot_mutiple': 5, 'supply': 6,
-            'auto_aim': 7}
-
+             'auto_aim': 7}
 bullet_speed: 12.5
-
-
 compet_info_index = {'red': {'supply': 0, 'bonus': 1, 'bonus_stay_time(deprecated)': 2, 'bonus_time': 3}, 
-                    'blue': {'supply': 0, 'bonus': 1, 'bonus_stay_time(deprecated)': 2, 'bonus_time': 3}}
+                     'blue': {'supply': 0, 'bonus': 1, 'bonus_stay_time(deprecated)': 2, 'bonus_time': 3}}
 int, shape: (2, 4)
-
 order_index = ['x', 'y', 'rotate', 'yaw', 'shoot', 'supply', 'shoot_mode', 'auto_aim']
 int, shape: (8,)
     x, -1: back, 0: no, 1: head
@@ -830,12 +848,8 @@ int, shape: (8,)
     shoot, 0: not shoot, 1: shoot
     yaw, -1: anti-clockwise, 0: no, 1: clockwise, for gimbal
     auto_aim, 0: not, 1: auto aim
-
 car_index = {"owner": 0, 'x': 1, 'y': 2, "angle": 3, "yaw": 4, "heat": 5, "hp": 6, 
-            "freeze_time": 7, "is_supply": 8, "can_shoot": 9, 'bullet': 10, 'stay_time': 11,
-            'wheel_hit': 12, 'armor_hit': 13, 'car_hit': 14}
+             "freeze_time": 7, "is_supply": 8, "can_shoot": 9, 'bullet': 10, 'stay_time': 11,
+             'wheel_hit': 12, 'armor_hit': 13, 'car_hit': 14}
 float, shape: (14,)
-
 '''
-
-
