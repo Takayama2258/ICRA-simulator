@@ -1,5 +1,5 @@
-from spinup import ppo_tf1 as ppo
-import tensorflow as tf
+from stable_baselines3 import PPO
+import torch
 import gym
 import ICRA_simulator
 import random
@@ -12,7 +12,8 @@ def ppo_test():
 
     # logger_kwargs = dict(output_dir='path/to/output_dir', exp_name='experiment_name')
 
-    ppo(env_fn=env, steps_per_epoch=50, epochs=10)
+    model = PPO('MlpPolicy',env, verbose=1)
+    model.learn(total_timesteps=1000)
 
     
 
@@ -32,4 +33,4 @@ def demo():
         if done:
            return total_reward
 if __name__ =="__main__":
-    demo()
+    ppo_test()
