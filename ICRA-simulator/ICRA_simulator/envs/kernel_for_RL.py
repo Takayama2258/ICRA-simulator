@@ -228,23 +228,15 @@ class kernal(gym.Env): # gym.Env
 
         self.prev_reward = 100
   
-        # observation_high = np.array([
-        #     np.finfo(np.float32).max,
-        #     np.finfo(np.float32).max,
-        #     np.finfo(np.float32).max,
-        #     np.finfo(np.float32).max,
-        #     np.finfo(np.float32).max
-        # ])
-        # observation_low = -observation_high
-
+  
         self.action_space = spaces.Box(low=np.array([0,-1]),high=np.array([7,1]))
         # self.observation_space = spaces.Box(observation_low, observation_high)
         self.observation_space = spaces.Dict({
             'time': spaces.Box(low=0,high=180,shape=(1,)),
-            'cars': spaces.Box(low=-1000.0,high=5000.0,shape=(car_num,15), dtype='float32'),
-            'compet': spaces.Box(low=0,high=6000,shape=(2,4)),
-            'detect': spaces.Box(low=0,high=1,shape=(car_num,car_num)),
-            'vision': spaces.Box(low=0,high=1,shape=(car_num,car_num))
+            'cars': spaces.Box(low=-1000.0,high=5000.0,shape=(self.car_num*15,), dtype='float32'),
+            'compet': spaces.Box(low=0,high=6000,shape=(8,)),
+            'detect': spaces.Box(low=0,high=1,shape=(self.car_num,self.car_num)),
+            'vision': spaces.Box(low=0,high=1,shape=(self.car_num,self.car_num))
         })
 
         if render:
