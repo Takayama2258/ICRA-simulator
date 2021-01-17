@@ -228,24 +228,14 @@ class kernal(gym.Env): # gym.Env
 
         self.prev_reward = 100
   
-        # observation_low = np.array([
-        #     0,
-        #     np.full((car_num,15),-1000),
-        #     np.array([[0, 0, 0, 0], [0, 0, 0, 0]], dtype='int16'),
-        #     np.full((car_num,car_num),0),
-        #     np.full((car_num,car_num),0)
-        # ])
         # observation_high = np.array([
-        #   180,
-        #   np.array([[1, 800, 500, 180, 90, 5000, 2000, 600, 1, 1, 5000, 1000, 5000, 5000, 5000],
-        #                  [1, 800, 500, 180, 90, 5000, 2000, 600, 1, 1, 5000, 1000, 5000, 5000, 5000],
-        #                  [1, 800, 500, 180, 90, 5000, 2000, 600, 1, 1, 5000, 1000, 5000, 5000, 5000],
-        #                  [1, 800, 500, 180, 90, 5000, 2000, 600, 1, 1, 5000, 1000, 5000, 5000, 5000]], dtype='float32'),
-        #   np.full((car_num,15),5000),
-        #   np.array([[2, 1, 1000, 6000], [2, 1, 1000, 6000]], dtype='int16'),
-        #   np.full((car_num,car_num),1),
-        #   np.full((car_num,car_num),1)
+        #     np.finfo(np.float32).max,
+        #     np.finfo(np.float32).max,
+        #     np.finfo(np.float32).max,
+        #     np.finfo(np.float32).max,
+        #     np.finfo(np.float32).max
         # ])
+        # observation_low = -observation_high
 
         self.action_space = spaces.Box(low=np.array([0,-1]),high=np.array([7,1]))
         # self.observation_space = spaces.Box(observation_low, observation_high)
@@ -256,7 +246,6 @@ class kernal(gym.Env): # gym.Env
             'detect': spaces.Box(low=0,high=1,shape=(car_num,car_num)),
             'vision': spaces.Box(low=0,high=1,shape=(car_num,car_num))
         })
-
 
         if render:
             pygame.init()
